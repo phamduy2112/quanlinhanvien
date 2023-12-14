@@ -274,7 +274,7 @@ function handleValidate(event) {
 
     switch (id) {
       case "tknv": {
-        errors[id] = new KiemTraLoi(value).boTrong().string().min(6).layLoiRa();
+        errors[id] = new KiemTraLoi(value).boTrong().string().min(4).max(6).layLoiRa();
         break;
       }
       case "name": {
