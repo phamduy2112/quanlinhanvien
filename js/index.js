@@ -25,7 +25,7 @@ themNV.onclick=function(event){
    
         var thuocTinh=phantu.id;
         nv[thuocTinh]=phantu.value;
-        // console.log(nv);
+      
         // Tao 1 nhan vien
        
     })
@@ -258,7 +258,7 @@ function handleBlur(event){
 console.log("ele",event.target.id,event.target.value);
 // gán giá trị cho id là true
 touches[event.target.id]=true;
-console.dir(touches);
+
 handleValidate(event);
 renderErorrs();
 
@@ -271,7 +271,7 @@ function handleValidate(event) {
     var id = event.target.id;
     var value = event.target.value;
   
-    console.log(id);
+
     switch (id) {
       case "tknv": {
         errors[id] = new KiemTraLoi(value).boTrong().string().min(6).layLoiRa();
@@ -328,11 +328,11 @@ function renderErorrs(){
   console.log(errors[thuocTinh]);
       text=`<span class="sp-thongbao" id="tb">${errors[thuocTinh]}</span>`; 
 
-      console.log(text);
+
     
 
     var nextEle=ele.parentElement.nextElementSibling;
-    console.log(nextEle);
+
  
 var meassageHtml=`${errors[thuocTinh]}`
 

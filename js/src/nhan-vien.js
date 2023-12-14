@@ -10,4 +10,3 @@ this.gioLam=Number(gioLam);
 this.xeploai=xeploai;
 this.tongLuong=tongLuong;
 }
-console.log("100"*3);

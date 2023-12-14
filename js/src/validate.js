@@ -15,11 +15,10 @@ function KiemTraLoi(value){
         if(this.message) return this;
            var pattern= /^-?\d*\.?\d+$/;
            if(!pattern.test(this.value.trim())){
-            // Nếu k truyền thì sẽ lấy giá trị mặc định
-            // message:falsy thì nó sẽ lấy giá trị phía sau.
+           
                   this.message=message || "Giá trị nhập vào sai định dạng số tự nhiên";
            }
-           return this; // sẽ như lớp đối tượng tạo ra
+           return this; 
            // method:getter
           
         }
@@ -35,11 +34,11 @@ function KiemTraLoi(value){
         if(this.message) return this;
         var regexNumber = /^-?\d*\.?\d+$/;
         if(regexNumber.test(this.value.trim())){
-            if(Number(this.value) <= valueMin ){
+            if(Number(this.value) < valueMin ){
                 this.message=message|| "Không được nhỏ hơn số "+valueMin
         }  
         }else{
-            if(this.value.trim().length <= valueMin){
+            if(this.value.trim().length < valueMin){
                 this.message=message|| `Không dc ít hơn ${valueMin} kí tự`
             }
         }
@@ -51,16 +50,17 @@ function KiemTraLoi(value){
         var regexNumber = /^-?\d*\.?\d+$/;
 
         if(regexNumber.test(this.value.trim())){
-            if(Number(this.value) > valueMax){
+            if(Number(this.value) >=valueMax){
                 this.message=message || "Không được lớn hơn số "+valueMax;
             }
         }else{
-            if(this.value.trim().length>valueMax){
+            if(this.value.trim().length>=valueMax){
                 this.message=message || `Không dc lớn hơn ${valueMax} kí tự`
             }
         }
         return this;
     }
+    //
     this.passWord = function (message) {
         if (this.message) return this;
         var regexPw = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*()_+-]).{6,10}$/;
@@ -87,4 +87,3 @@ function KiemTraLoi(value){
     }
 }
 
-console.log(new KiemTraLoi ("Nqwe#1").boTrong().passWord().layLoiRa());
