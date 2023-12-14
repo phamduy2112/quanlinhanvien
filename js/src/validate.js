@@ -11,7 +11,20 @@ function KiemTraLoi(value){
         }
         return this
     }
+    this.number=function(message){
+        if(this.message) return this;
+           var pattern= /^-?\d*\.?\d+$/;
+           if(!pattern.test(this.value.trim())){
+            // Nếu k truyền thì sẽ lấy giá trị mặc định
+            // message:falsy thì nó sẽ lấy giá trị phía sau.
+                  this.message=message || "Giá trị nhập vào sai định dạng số tự nhiên";
+           }
+           return this; // sẽ như lớp đối tượng tạo ra
+           // method:getter
+          
+        }
     this.string=function(message){
+        if(this.message) return this;
         var kiemTraString=/^[a-zA-Z]/
         if(!kiemTraString.test(this.value)){
             this.message=message || "Không phải là kí tự"
@@ -50,16 +63,28 @@ function KiemTraLoi(value){
     }
     this.passWord = function (message) {
         if (this.message) return this;
-        var regexPw = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        var regexPw = /^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*()_+-]).{6,10}$/;
     
         if (!regexPw.test(this.value)) {
-          this.message = message || "Ít nhất là 1 ký tự chữ và có 1 ký tự số";
+          this.message = message || "Ít nhất là 1 ký tự chữ, có 1 ký tự số , 1 ký tự đặc biệt và có độ dài 6 đến 10 kí tự";
         }
         return this;
       };
+      this.email=function(message){
+        if (this.message) return this;
+    
+        var regexEmail =
+          /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
+    
+        if (!regexEmail.test(this.value)) {
+          this.message = message || "Sai định dạng email.";
+        }
+    
+        return this;
+    }
     this.layLoiRa= function(){
         return this.message;
     }
 }
 
-console.log(new KiemTraLoi ("123").boTrong().string().layLoiRa());
+console.log(new KiemTraLoi ("Nqwe#1").boTrong().passWord().layLoiRa());

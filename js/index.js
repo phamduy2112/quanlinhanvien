@@ -10,9 +10,18 @@ themNV.onclick=function(event){
     event.preventDefault();
     console.log("Thành công");
     var nv={};
+    isEdit=false;
+    doiTrangThaiButton();
     var giaTriForm=document.querySelectorAll('.form-NV input,.form-NV select');
-  
-    giaTriForm.forEach(function(phantu){
+    if (isValid() === false) {
+        setTouches(true);
+     
+    
+        renderErorrs();
+        return;
+      }
+      else{
+         giaTriForm.forEach(function(phantu){
    
         var thuocTinh=phantu.id;
         nv[thuocTinh]=phantu.value;
@@ -42,10 +51,21 @@ themNV.onclick=function(event){
         loadNhanVien();
         // reset form
        
-        formNV.reset();
+        formNV.reset();  
+      }
+ 
 }
 // cập nhận sv
 capNhanNV.onclick=function(event){
+    isEdit=true;
+    
+    if (isValid() === false) {
+        setTouches(true);
+     
+    
+        renderErorrs();
+        return;
+      }
     event.preventDefault();
     console.log("Thành công cập nhận");
     var nv={};
@@ -84,6 +104,7 @@ capNhanNV.onclick=function(event){
 }
 // thêm sinh viên
 function themSinhVien(nhanVien){
+ 
     dsNV.themDanhSachNhanVien(nhanVien);
 }
 // load nhan vien trong table
@@ -220,22 +241,156 @@ function doiTrangThaiButton(){
 
     if(isEdit){
         document.querySelector('#btnThemNV').disabled=true;
+        document.querySelector('#btnCapNhat').disabled=undefined;
 
     }else{
         document.querySelector('#btnThemNV').disabled=undefined
+        document.querySelector('#btnCapNhat').disabled=true
     }
 }
-// kt lỗi
-var errors={
-    msv:"K bỏ trống"
-}
+// gắn giá trị cho từng ô input
 var touches={
 
 }
-var giaTriForm=document.querySelectorAll('.form-NV input,.form-NV select');
-giaTriForm.forEach(function (ele){
-    
-})
-function renderErorrs(){
-    
+var giaTriForm=document.querySelectorAll('.form-NV .form-group .input-group input,.form-NV .form-group .input-group select');
+function handleBlur(event){
+    // event.target:nó chỉnh là ô input của ct
+console.log("ele",event.target.id,event.target.value);
+// gán giá trị cho id là true
+touches[event.target.id]=true;
+console.dir(touches);
+handleValidate(event);
+renderErorrs();
+
 }
+giaTriForm.forEach(function (ele){
+ele.onblur=handleBlur;
+
+})
+function handleValidate(event) {
+    var id = event.target.id;
+    var value = event.target.value;
+  
+    console.log(id);
+    switch (id) {
+      case "tknv": {
+        errors[id] = new KiemTraLoi(value).boTrong().string().min(6).layLoiRa();
+        break;
+      }
+      case "name": {
+        errors[id] = new KiemTraLoi(value).boTrong().string().layLoiRa();
+        break;
+      }
+      case "password": {
+        errors[id] = new KiemTraLoi(value).boTrong().passWord().layLoiRa();
+        break;
+      }
+      case "email": {
+        errors[id] = new KiemTraLoi(value).boTrong().email().layLoiRa();
+        break;
+      }
+      case "datepicker":{
+        errors[id] = new KiemTraLoi(value).boTrong().layLoiRa();
+        break;
+      }
+      case"luongCB":{
+        errors[id] = new KiemTraLoi(value).boTrong().number().min(1000000).max(20000000).layLoiRa();
+        break;
+      }
+    case "chucvu":{
+        errors[id] = new KiemTraLoi(value).boTrong().layLoiRa();
+        break;
+    }
+    case "gioLam":{
+        errors[id] = new KiemTraLoi(value).boTrong().number().min(80).max(200).layLoiRa();
+        break;
+    }
+    
+      default:
+    }
+  }
+// kt lỗi
+var errors={
+  
+}
+
+var layInput=document.querySelectorAll('.input-group');
+function renderErorrs(){
+
+    giaTriForm.forEach(function(ele){
+        var thuocTinh=ele.id;
+       
+        var isValid=errors[thuocTinh] !=undefined && touches[thuocTinh]; // nếu có giá trị thì là true còn lại là falase
+        if(!isValid){
+               return;
+              
+        }
+  console.log(errors[thuocTinh]);
+      text=`<span class="sp-thongbao" id="tb">${errors[thuocTinh]}</span>`; 
+
+      console.log(text);
+    
+
+    var nextEle=ele.parentElement.nextElementSibling;
+    console.log(nextEle);
+ 
+var meassageHtml=`${errors[thuocTinh]}`
+
+if(nextEle){
+// tạo mới ele
+nextEle.innerHTML=meassageHtml;
+}else{
+    ele.insertAdjacentHTML('afterend',meassageHtml);
+
+}
+
+
+      
+   
+     
+     
+
+
+        
+    })
+}
+//
+function setTouches(value){
+    giaTriForm.forEach(function (ele){
+           touches[ele.id]=value;
+    })
+    }
+    setTouches(false);
+function isValid(){
+   
+if(Object.values(errors).length !== giaTriForm.length){
+   setTouches(true);
+   giaTriForm.forEach(function(ele){
+ 
+    handleValidate({
+
+   
+    target: {
+           id:ele.id,
+           value:"",
+    }
+}
+   );
+ }) 
+    return false;
+ }
+
+ var isTouth= Object.values(touches).every(function(item){
+           return item;
+    })
+
+   
+  
+    var isMessage= Object.values(errors).every(function(item){
+           // chứng tỏ k có message lỗi
+           return item.length===0;
+    })
+    return isTouth && isMessage;
+}
+
+isValid();
